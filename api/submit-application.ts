@@ -30,33 +30,33 @@ interface ApplicationPayload {
 
 const REQUIRED_STRING_FIELDS: (keyof ApplicationPayload)[] = ["fullName", "email", "primaryRole", "bio"];
 
-function toAirtableFields(payload: ApplicationPayload) {
+function toSupabaseRow(payload: ApplicationPayload) {
   return {
-    "Full Name": payload.fullName,
-    Email: payload.email,
-    "Primary Role": payload.primaryRole,
-    "Areas of Expertise": (payload.expertiseAreas || []).join(", "),
-    Bio: payload.bio,
-    Portfolio: payload.portfolioLinks,
-    "Preferred Project Types": (payload.preferredProjectTypes || []).join(", "),
-    "Primary Industries": (payload.primaryIndustries || []).join(", "),
-    "Hours Per Week": payload.hoursPerWeek,
-    "Preferred Contract Length": payload.preferredContractLength,
-    "Compensation Type": payload.compensationType,
-    "Compensation Details": payload.compensationDetails,
-    "Future Opportunities": payload.futureOpportunities,
-    "Companies Worked With": payload.companiesWorkedWith,
-    "AI Experience": payload.aiExperience,
-    "Technical Skills": payload.technicalSkills,
-    Languages: payload.languages,
-    "Research Methods": payload.researchMethods,
-    Specializations: (payload.specializations || []).join(", "),
-    "Exciting Projects": payload.excitingProjects,
-    "Deep Industries": payload.deepIndustries,
-    "Long-Term Interest": payload.longTermInterest,
-    "Remote Only": payload.remoteOnly,
-    "Time Zone": payload.timeZone,
-    "Earliest Availability": payload.earliestAvailability || undefined,
+    full_name: payload.fullName,
+    email: payload.email,
+    primary_role: payload.primaryRole,
+    expertise_areas: payload.expertiseAreas || [],
+    bio: payload.bio,
+    portfolio_links: payload.portfolioLinks || null,
+    preferred_project_types: payload.preferredProjectTypes || [],
+    primary_industries: payload.primaryIndustries || [],
+    hours_per_week: payload.hoursPerWeek ? Number(payload.hoursPerWeek) : null,
+    preferred_contract_length: payload.preferredContractLength || null,
+    compensation_type: payload.compensationType || null,
+    compensation_details: payload.compensationDetails || null,
+    future_opportunities: payload.futureOpportunities || null,
+    companies_worked_with: payload.companiesWorkedWith || null,
+    ai_experience: payload.aiExperience || null,
+    technical_skills: payload.technicalSkills || null,
+    languages: payload.languages || null,
+    research_methods: payload.researchMethods || null,
+    specializations: payload.specializations || [],
+    exciting_projects: payload.excitingProjects || null,
+    deep_industries: payload.deepIndustries || null,
+    long_term_interest: payload.longTermInterest || null,
+    remote_only: payload.remoteOnly || null,
+    time_zone: payload.timeZone || null,
+    earliest_availability: payload.earliestAvailability || null,
   };
 }
 
@@ -74,42 +74,39 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
   }
 
-  const apiKey = process.env.AIRTABLE_API_KEY;
-  const baseId = process.env.AIRTABLE_BASE_ID;
-  const tableName = process.env.AIRTABLE_TABLE_NAME || "Applications";
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const tableName = process.env.SUPABASE_TABLE_NAME || "applications";
 
-  if (!apiKey || !baseId) {
-    console.error("Airtable is not configured: missing AIRTABLE_API_KEY or AIRTABLE_BASE_ID");
+  if (!supabaseUrl || !serviceRoleKey) {
+    console.error("Supabase is not configured: missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
     return res.status(500).json({
       error: "Application storage isn't configured yet. Please try again later.",
     });
   }
 
   try {
-    const airtableRes = await fetch(
-      `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          fields: toAirtableFields(payload as ApplicationPayload),
-        }),
-      }
-    );
+    const supabaseRes = await fetch(`${supabaseUrl}/rest/v1/${tableName}`, {
+      method: "POST",
+      headers: {
+        apikey: serviceRoleKey,
+        Authorization: `Bearer ${serviceRoleKey}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation",
+      },
+      body: JSON.stringify(toSupabaseRow(payload as ApplicationPayload)),
+    });
 
-    if (!airtableRes.ok) {
-      const errorBody = await airtableRes.text();
-      console.error("Airtable submission failed:", airtableRes.status, errorBody);
+    if (!supabaseRes.ok) {
+      const errorBody = await supabaseRes.text();
+      console.error("Supabase submission failed:", supabaseRes.status, errorBody);
       return res.status(502).json({ error: "Failed to save application. Please try again." });
     }
 
-    const record = await airtableRes.json();
-    return res.status(200).json({ ok: true, id: record.id });
+    const [record] = await supabaseRes.json();
+    return res.status(200).json({ ok: true, id: record?.id });
   } catch (err) {
-    console.error("Unexpected error submitting to Airtable:", err);
+    console.error("Unexpected error submitting to Supabase:", err);
     return res.status(500).json({ error: "Unexpected error. Please try again." });
   }
 }

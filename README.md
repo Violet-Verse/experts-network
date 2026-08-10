@@ -18,7 +18,8 @@ The form covers:
 
 - [Vite](https://vitejs.dev/) + React + TypeScript for the front end.
 - A single serverless function (`api/submit-application.ts`, Vercel Node runtime) that
-  validates the submission and forwards it to an Airtable base.
+  validates the submission and forwards it to a [Supabase](https://supabase.com/)
+  Postgres table.
 
 ## Local development
 
@@ -31,36 +32,35 @@ The form runs at `http://localhost:5173`. The `/api/submit-application` endpoint
 works when deployed on Vercel (or run via `vercel dev`), since it's a serverless
 function — see below.
 
-## Connecting Airtable
+## Connecting Supabase
 
-Submissions are stored in Airtable. To wire this up:
+Submissions are stored in a Supabase table. To wire this up:
 
-1. Create an Airtable base with a table (default name: `Applications`) containing these
-   fields (all plain text/long text is fine — the API sends everything as strings,
-   including multi-select answers joined with `, `):
+1. Create a Supabase project, then run `supabase/schema.sql` in the SQL editor
+   (Dashboard → SQL Editor → New query) to create the `applications` table. Row level
+   security is enabled with no policies, so only the service role key can read/write
+   it — the anon/public key has no access.
 
-   `Full Name`, `Email`, `Primary Role`, `Areas of Expertise`, `Bio`, `Portfolio`,
-   `Preferred Project Types`, `Primary Industries`, `Hours Per Week`,
-   `Preferred Contract Length`, `Compensation Type`, `Compensation Details`,
-   `Future Opportunities`, `Companies Worked With`, `AI Experience`,
-   `Technical Skills`, `Languages`, `Research Methods`, `Specializations`,
-   `Exciting Projects`, `Deep Industries`, `Long-Term Interest`, `Remote Only`,
-   `Time Zone`, `Earliest Availability`.
-
-2. Create a [Personal Access Token](https://airtable.com/create/tokens) scoped to
-   `data.records:write` with access to that base.
+2. Grab the values from Project Settings → API:
+   - **Project URL** → `SUPABASE_URL`
+   - **service_role key** (not the anon key — this one bypasses RLS and must stay
+     server-side only) → `SUPABASE_SERVICE_ROLE_KEY`
 
 3. Copy `.env.example` to `.env.local` (for `vercel dev`) or set these as environment
    variables in your hosting provider:
 
    ```
-   AIRTABLE_API_KEY=your_token
-   AIRTABLE_BASE_ID=your_base_id
-   AIRTABLE_TABLE_NAME=Applications
+   SUPABASE_URL=https://your-project.supabase.co
+   SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+   SUPABASE_TABLE_NAME=applications
    ```
 
 Until these are set, submissions will fail with a friendly error and the failure is
 logged server-side — nothing is silently dropped.
+
+`data/applications-template.csv` documents the same schema as a flat CSV (one header
+row + one example row) — useful as a reference for what's being collected, or for
+manual exports/imports outside of Supabase.
 
 ## Deployment
 
