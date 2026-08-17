@@ -74,12 +74,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
   }
 
-  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const tableName = process.env.SUPABASE_TABLE_NAME || "applications";
 
   if (!supabaseUrl || !serviceRoleKey) {
-    console.error("Supabase is not configured: missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
+    console.error("Supabase is not configured: missing SUPABASE_URL/NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
     return res.status(500).json({
       error: "Application storage isn't configured yet. Please try again later.",
     });
