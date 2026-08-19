@@ -85,8 +85,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
   }
 
+  if (!/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/.test(supabaseUrl)) {
+    console.error("SUPABASE_URL does not look like a Supabase project API URL:", supabaseUrl);
+    return res.status(500).json({
+      error: `Application storage is misconfigured: SUPABASE_URL is set to "${supabaseUrl}", which is not a valid Supabase project API URL (expected https://<project-ref>.supabase.co). This is likely the dashboard URL instead of the Project URL from Settings > API.`,
+    });
+  }
+
   try {
-    const supabaseRes = await fetch(`${supabaseUrl}/rest/v1/${tableName}`, {
+    const supabaseRes = await fetch(`${supabaseUrl.replace(/\/$/, "")}/rest/v1/${tableName}`, {
       method: "POST",
       headers: {
         apikey: serviceRoleKey,
@@ -100,7 +107,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!supabaseRes.ok) {
       const errorBody = await supabaseRes.text();
       console.error("Supabase submission failed:", supabaseRes.status, errorBody);
-      return res.status(502).json({ error: "Failed to save application. Please try again." });
+      return res.status(502).json({
+        error: `Failed to save application (Supabase responded ${supabaseRes.status}): ${errorBody.slice(0, 300)}`,
+      });
     }
 
     const [record] = await supabaseRes.json();
