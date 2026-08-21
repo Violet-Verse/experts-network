@@ -36,10 +36,11 @@ function — see below.
 
 Submissions are stored in a Supabase table. To wire this up:
 
-1. Create a Supabase project, then run `supabase/schema.sql` in the SQL editor
-   (Dashboard → SQL Editor → New query) to create the `applications` table. Row level
-   security is enabled with no policies, so only the service role key can read/write
-   it — the anon/public key has no access.
+1. Create a Supabase project, then run `supabase/schema.sql` followed by the files in
+   `supabase/migrations/` (in order) in the SQL editor (Dashboard → SQL Editor → New
+   query) to create the `Expert_Network` table. Row level security is enabled with no
+   policies, so only the service role key can read/write it — the anon/public key has
+   no access.
 
 2. Grab the values from Project Settings → API:
    - **Project URL** → `SUPABASE_URL`
@@ -52,7 +53,7 @@ Submissions are stored in a Supabase table. To wire this up:
    ```
    SUPABASE_URL=https://your-project.supabase.co
    SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
-   SUPABASE_TABLE_NAME=applications
+   SUPABASE_TABLE_NAME=Expert_Network
    ```
 
 Until these are set, submissions will fail with a friendly error and the failure is

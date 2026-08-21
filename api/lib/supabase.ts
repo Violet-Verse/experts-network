@@ -1,7 +1,7 @@
 export function getSupabaseConfig() {
   const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  const tableName = process.env.SUPABASE_TABLE_NAME || "applications";
+  const tableName = process.env.SUPABASE_TABLE_NAME || "Expert_Network";
   return { url, serviceRoleKey, tableName };
 }
 
