@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getSupabaseConfig, supabaseRequest, SupabaseConfigError } from "./lib/supabase";
+import { getSupabaseConfig, supabaseRequest, SupabaseConfigError } from "./lib/supabase.js";
 
 interface Step2Payload {
   id: string;
