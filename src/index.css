@@ -12,7 +12,7 @@
   --border: #33251f;
   --danger: #e2685f;
   --radius: 14px;
-  --font-display: "Playfair Display", Georgia, serif;
+  --font-display: "Inter", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
   --font-body: "Inter", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
 }
 
@@ -46,6 +46,7 @@ body {
 .wordmark {
   font-family: var(--font-display);
   font-style: italic;
+  font-weight: 700;
   font-size: 40px;
   color: var(--ink);
   letter-spacing: 0.01em;
@@ -121,6 +122,7 @@ body {
 
 .accent-number {
   font-family: var(--font-display);
+  font-weight: 800;
   font-size: 56px;
   line-height: 1;
   margin: 4px 0 12px;
