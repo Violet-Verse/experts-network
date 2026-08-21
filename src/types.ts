@@ -1,69 +1,29 @@
-export interface ApplicationFormData {
-  // Part 1 — Tell Us About Your Expertise
-  primaryRole: string;
-  expertiseAreas: string[]; // exactly 3
-  bio: string;
-  portfolioLinks: string;
-
-  // Part 1 — Network Fit
-  preferredProjectTypes: string[];
-  primaryIndustries: string[];
-  hoursPerWeek: string;
-  preferredContractLength: string;
-  compensationType: string;
-  compensationDetails: string;
-
-  // Part 2 — Experience
-  companiesWorkedWith: string;
-  aiExperience: string;
-  technicalSkills: string;
-  languages: string;
-  researchMethods: string;
-
-  // Part 3 — Specializations
-  specializations: string[];
-
-  // Part 4 — Matching
-  excitingProjects: string;
-  deepIndustries: string;
-  longTermInterest: string;
-  remoteOnly: string;
-  timeZone: string;
-  earliestAvailability: string;
-
-  // Contact (needed to actually match someone to opportunities)
+export interface Step1Data {
+  linkedinUrl: string;
   fullName: string;
   email: string;
 }
 
-export const emptyFormData: ApplicationFormData = {
+export const emptyStep1Data: Step1Data = {
+  linkedinUrl: "",
+  fullName: "",
+  email: "",
+};
+
+export interface Step2Data {
+  primaryRole: string;
+  expertiseAreas: string[]; // exactly 3
+  bio: string;
+  hoursPerWeek: string;
+  compensationDetails: string;
+  primaryIndustries: string[];
+}
+
+export const emptyStep2Data: Step2Data = {
   primaryRole: "",
   expertiseAreas: [],
   bio: "",
-  portfolioLinks: "",
-
-  preferredProjectTypes: [],
-  primaryIndustries: [],
   hoursPerWeek: "",
-  preferredContractLength: "",
-  compensationType: "",
   compensationDetails: "",
-
-  companiesWorkedWith: "",
-  aiExperience: "",
-  technicalSkills: "",
-  languages: "",
-  researchMethods: "",
-
-  specializations: [],
-
-  excitingProjects: "",
-  deepIndustries: "",
-  longTermInterest: "",
-  remoteOnly: "",
-  timeZone: "",
-  earliestAvailability: "",
-
-  fullName: "",
-  email: "",
+  primaryIndustries: [],
 };
