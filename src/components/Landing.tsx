@@ -2,16 +2,15 @@ export function Landing() {
   return (
     <>
       <div className="wordmark-banner">
-        <span className="wordmark">Violet Verse Experts</span>
+        <span className="wordmark">Verso Network</span>
       </div>
 
       <div className="landing-hero">
         <span className="eyebrow">Invite Only</span>
-        <h1>Join the Experts Network</h1>
+        <h1>A Job Intelligence Service for the World's Most Dynamic Creators</h1>
         <p>
-          A private network of writers, researchers, evaluators, and strategists working at the
-          intersection of media, marketing, and emerging technology — matched with paid research,
-          AI evaluation, and content opportunities as they come up.
+          We match creators with companies and projects built on ethical data capture. Get paid
+          weekly. Work on the most cutting-edge projects out there.
         </p>
       </div>
 
@@ -46,10 +45,18 @@ export function Landing() {
           <span className="eyebrow">The Network</span>
           <div className="accent-number">300+</div>
           <p className="accent-desc">
-            Writers worldwide — media, marketing, and crypto experts built over a decade of
+            Creators worldwide — media, marketing, and crypto experts built over a decade of
             editorial and brand partnerships.
           </p>
         </div>
+      </div>
+
+      <div className="mission-block">
+        <span className="eyebrow">Our Mission</span>
+        <p>
+          We believe in the power of intellectual capital — and we operate on ethical data and AI
+          practices.
+        </p>
       </div>
     </>
   );

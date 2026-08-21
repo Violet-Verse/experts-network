@@ -85,7 +85,7 @@ export function ApplicationForm() {
         <div className="status-icon">💜</div>
         <h2>You're on the list!</h2>
         <p>
-          Thanks for applying to the Experts Network, {step1Data.fullName.split(" ")[0] || "friend"}. We'll
+          Thanks for applying to Verso Network, {step1Data.fullName.split(" ")[0] || "friend"}. We'll
           review your application and reach out at {step1Data.email} when there's a fit.
         </p>
       </div>

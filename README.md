@@ -1,7 +1,7 @@
-# Experts Network — Application
+# Verso Network — Application
 
-A multi-step application form for the Experts Network: matching contributors to future
-paid research, AI evaluation, and content opportunities.
+A job intelligence service for the world's most dynamic creators, matching them with
+companies and projects built on ethical data capture.
 
 The form covers:
 
