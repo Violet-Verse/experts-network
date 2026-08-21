@@ -60,6 +60,38 @@ export const CONTRACT_LENGTHS = [
 
 export const COMPENSATION_TYPES = ["Hourly", "Project-based", "Flexible"];
 
+export const HOURS_PER_WEEK_OPTIONS = [
+  "1–5 hrs/week",
+  "5–10 hrs/week",
+  "10–20 hrs/week",
+  "20–30 hrs/week",
+  "30+ hrs/week",
+];
+
+export const COMPENSATION_BAND_OPTIONS = [
+  "Under $50/hr equivalent",
+  "$50–75/hr equivalent",
+  "$75–100/hr equivalent",
+  "$100–150/hr equivalent",
+  "$150+/hr equivalent",
+  "Open to discussing / project-based",
+];
+
+export const TIME_ZONE_OPTIONS = [
+  "Pacific Time (US & Canada) — UTC-8/-7",
+  "Mountain Time (US & Canada) — UTC-7/-6",
+  "Central Time (US & Canada) — UTC-6/-5",
+  "Eastern Time (US & Canada) — UTC-5/-4",
+  "UK / Ireland — UTC+0/+1",
+  "Central Europe — UTC+1/+2",
+  "Eastern Europe — UTC+2/+3",
+  "India — UTC+5:30",
+  "Southeast Asia — UTC+7/+8",
+  "East Asia — UTC+8/+9",
+  "Australia (Eastern) — UTC+10/+11",
+  "Other / Flexible",
+];
+
 export const SPECIALIZATIONS = [
   "AI Evaluation",
   "RLHF",

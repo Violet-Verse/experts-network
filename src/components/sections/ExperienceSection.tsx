@@ -1,7 +1,7 @@
-import type { ApplicationFormData } from "../types";
-import { Card } from "./fields";
+import type { ApplicationFormData } from "../../types";
+import { Card } from "../fields";
 
-export function StepPart2({
+export function ExperienceSection({
   data,
   update,
 }: {
@@ -11,7 +11,7 @@ export function StepPart2({
   return (
     <>
       <div className="form-section">
-        <h2>Part 2: Experience</h2>
+        <h2>Experience</h2>
         <p className="section-sub">Tell us more about the work you've done and how you work.</p>
       </div>
 

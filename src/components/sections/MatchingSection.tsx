@@ -1,18 +1,20 @@
-import type { ApplicationFormData } from "../types";
-import { LONG_TERM_OPTIONS, REMOTE_OPTIONS } from "../formConfig";
-import { Card, PillGroup } from "./fields";
+import type { ApplicationFormData } from "../../types";
+import { LONG_TERM_OPTIONS, REMOTE_OPTIONS, TIME_ZONE_OPTIONS } from "../../formConfig";
+import { Card, PillGroup, SelectField } from "../fields";
 
-export function StepPart4({
+export function MatchingSection({
   data,
   update,
+  errors,
 }: {
   data: ApplicationFormData;
   update: <K extends keyof ApplicationFormData>(key: K, value: ApplicationFormData[K]) => void;
+  errors: Partial<Record<keyof ApplicationFormData, string>>;
 }) {
   return (
     <>
       <div className="form-section">
-        <h2>Part 4: Matching</h2>
+        <h2>Matching</h2>
         <p className="section-sub">Help us find the right fit for you.</p>
       </div>
 
@@ -34,11 +36,11 @@ export function StepPart4({
         </Card>
 
         <Card icon="🕒" title="Time zone">
-          <input
-            type="text"
-            placeholder="e.g. ET (UTC-5)"
+          <SelectField
             value={data.timeZone}
-            onChange={(e) => update("timeZone", e.target.value)}
+            onChange={(v) => update("timeZone", v)}
+            options={TIME_ZONE_OPTIONS}
+            placeholder="Select your time zone…"
           />
         </Card>
 
@@ -58,10 +60,12 @@ export function StepPart4({
       <div className="card-grid">
         <Card icon="🙋" title="Full name">
           <input type="text" value={data.fullName} onChange={(e) => update("fullName", e.target.value)} />
+          {errors.fullName && <p className="error-text">{errors.fullName}</p>}
         </Card>
 
         <Card icon="✉️" title="Email">
           <input type="email" value={data.email} onChange={(e) => update("email", e.target.value)} />
+          {errors.email && <p className="error-text">{errors.email}</p>}
         </Card>
       </div>
     </>

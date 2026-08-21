@@ -1,8 +1,8 @@
-import type { ApplicationFormData } from "../types";
-import { SPECIALIZATIONS } from "../formConfig";
-import { CheckboxGrid } from "./fields";
+import type { ApplicationFormData } from "../../types";
+import { SPECIALIZATIONS } from "../../formConfig";
+import { CheckboxGrid } from "../fields";
 
-export function StepPart3({
+export function SpecializationsSection({
   data,
   update,
 }: {
@@ -12,7 +12,7 @@ export function StepPart3({
   return (
     <>
       <div className="form-section">
-        <h2>Part 3: Specializations</h2>
+        <h2>Specializations</h2>
         <p className="section-sub">Check all that apply.</p>
       </div>
 

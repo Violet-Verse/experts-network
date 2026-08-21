@@ -11,7 +11,6 @@ interface ApplicationPayload {
   preferredContractLength: string;
   compensationType: string;
   compensationDetails: string;
-  futureOpportunities: string;
   companiesWorkedWith: string;
   aiExperience: string;
   technicalSkills: string;
@@ -40,11 +39,10 @@ function toSupabaseRow(payload: ApplicationPayload) {
     portfolio_links: payload.portfolioLinks || null,
     preferred_project_types: payload.preferredProjectTypes || [],
     primary_industries: payload.primaryIndustries || [],
-    hours_per_week: payload.hoursPerWeek ? Number(payload.hoursPerWeek) : null,
+    hours_per_week: payload.hoursPerWeek || null,
     preferred_contract_length: payload.preferredContractLength || null,
     compensation_type: payload.compensationType || null,
     compensation_details: payload.compensationDetails || null,
-    future_opportunities: payload.futureOpportunities || null,
     companies_worked_with: payload.companiesWorkedWith || null,
     ai_experience: payload.aiExperience || null,
     technical_skills: payload.technicalSkills || null,

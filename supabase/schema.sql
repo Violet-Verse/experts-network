@@ -1,5 +1,10 @@
 -- Experts Network application submissions.
 -- Run this in the Supabase SQL editor (or via the CLI) to create the table.
+--
+-- This file documents the v1 baseline schema. Changes since v1 live as
+-- numbered files in supabase/migrations/ — check there for the current
+-- shape of the table (e.g. future_opportunities was dropped and
+-- hours_per_week changed type in 0001_v2_field_cleanup.sql).
 
 create table if not exists public.applications (
   id uuid primary key default gen_random_uuid(),

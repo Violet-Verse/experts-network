@@ -1,32 +1,19 @@
 :root {
-  color-scheme: light dark;
-  --violet-50: #f5f3ff;
-  --violet-100: #ede9fe;
-  --violet-200: #ddd6fe;
-  --violet-400: #a78bfa;
-  --violet-500: #8b5cf6;
-  --violet-600: #7c3aed;
-  --violet-700: #6d28d9;
-  --violet-900: #4c1d95;
-  --ink: #201a34;
-  --ink-soft: #5b5470;
-  --card-bg: #ffffff;
-  --page-bg-1: #f6f3ff;
-  --page-bg-2: #ece4ff;
-  --border: #e4defc;
-  --danger: #d94f4f;
-  --radius: 18px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --ink: #f1edff;
-    --ink-soft: #b8aede;
-    --card-bg: #241d3a;
-    --page-bg-1: #17122a;
-    --page-bg-2: #241a3f;
-    --border: #3a2f5c;
-  }
+  --bg: #0b0908;
+  --surface: #17110f;
+  --surface-raised: #1f1613;
+  --maroon-600: #5c1220;
+  --maroon-700: #470d19;
+  --maroon-900: #2c0810;
+  --gold: #c9a34a;
+  --gold-soft: #e4cf94;
+  --ink: #f4ede2;
+  --ink-soft: #b8a99a;
+  --border: #33251f;
+  --danger: #e2685f;
+  --radius: 14px;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Inter", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
 }
 
 * {
@@ -35,93 +22,154 @@
 
 body {
   margin: 0;
-  font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-body);
   color: var(--ink);
-  background:
-    radial-gradient(circle at 15% 0%, var(--page-bg-2), transparent 55%),
-    linear-gradient(180deg, var(--page-bg-1), var(--page-bg-1));
+  background: var(--bg);
   min-height: 100vh;
 }
 
 .app-shell {
   max-width: 880px;
   margin: 0 auto;
-  padding: 40px 20px 80px;
+  padding: 0 20px 80px;
 }
 
-.app-header {
+/* Wordmark banner */
+.wordmark-banner {
+  margin: 0 -20px 40px;
+  padding: 56px 20px;
+  background: linear-gradient(160deg, var(--maroon-700), var(--maroon-900));
+  border-bottom: 1px solid var(--gold);
+  text-align: center;
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 40px;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+}
+
+/* Landing */
+.landing-hero {
   text-align: center;
   margin-bottom: 32px;
 }
 
-.app-header .eyebrow {
+.eyebrow {
   display: inline-block;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--violet-600);
-  background: var(--violet-100);
-  padding: 6px 14px;
-  border-radius: 999px;
+  color: var(--gold);
   margin-bottom: 14px;
 }
 
-.app-header h1 {
-  font-size: 32px;
-  margin: 0 0 10px;
+.landing-hero h1 {
+  font-family: var(--font-display);
+  font-size: 34px;
+  margin: 0 0 14px;
 }
 
-.app-header p {
+.landing-hero p {
   color: var(--ink-soft);
   font-size: 15px;
-  max-width: 560px;
+  max-width: 580px;
   margin: 0 auto;
+  line-height: 1.6;
+}
+
+.landing-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 16px;
+  margin-bottom: 44px;
+}
+
+@media (max-width: 700px) {
+  .landing-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bio-card .bio-name {
+  font-family: var(--font-display);
+  font-size: 24px;
+  margin: 0 0 4px;
+}
+
+.bio-card .bio-title {
+  color: var(--gold-soft);
+  font-size: 13px;
+  margin: 0 0 16px;
+}
+
+.bio-card .bio-line {
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 20px;
+}
+
+.card.accent {
+  background: linear-gradient(160deg, var(--maroon-600), var(--maroon-900));
+  border-color: var(--maroon-600);
+  justify-content: center;
+}
+
+.accent-number {
+  font-family: var(--font-display);
+  font-size: 56px;
+  line-height: 1;
+  margin: 4px 0 12px;
+}
+
+.accent-desc {
+  color: var(--ink);
+  opacity: 0.9;
+  font-size: 14px;
   line-height: 1.5;
+  margin: 0;
 }
 
-/* Progress bar */
-.progress-track {
+.stat-row {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 32px 0;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13.5px;
 }
 
-.progress-step {
+.stat-row:last-child {
+  border-bottom: none;
+}
+
+.stat-label {
+  flex: 0 0 110px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold);
+  padding-top: 1px;
+}
+
+.stat-value {
   flex: 1;
-  height: 6px;
-  border-radius: 999px;
-  background: var(--border);
-  overflow: hidden;
-}
-
-.progress-step .fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--violet-500), var(--violet-700));
-  transition: width 0.3s ease;
-}
-
-.progress-labels {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  font-weight: 600;
   color: var(--ink-soft);
-  margin-top: 8px;
-}
-
-.progress-labels .active {
-  color: var(--violet-600);
+  line-height: 1.5;
 }
 
 /* Section */
 .form-section {
-  margin-bottom: 8px;
+  margin: 40px 0 8px;
 }
 
 .form-section h2 {
-  font-size: 22px;
+  font-family: var(--font-display);
+  font-size: 24px;
   margin: 0 0 4px;
 }
 
@@ -146,11 +194,10 @@ body {
 }
 
 .card {
-  background: var(--card-bg);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 20px;
-  box-shadow: 0 1px 2px rgba(76, 29, 149, 0.04);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -196,7 +243,7 @@ textarea {
   padding: 10px 12px;
   border-radius: 10px;
   border: 1px solid var(--border);
-  background: transparent;
+  background: var(--surface-raised);
   color: var(--ink);
 }
 
@@ -209,7 +256,7 @@ textarea {
 input:focus,
 select:focus,
 textarea:focus {
-  outline: 2px solid var(--violet-400);
+  outline: 2px solid var(--gold);
   outline-offset: 1px;
 }
 
@@ -232,7 +279,7 @@ textarea:focus {
 
 .chip {
   border: 1px solid var(--border);
-  background: var(--violet-50);
+  background: var(--surface-raised);
   color: var(--ink);
   border-radius: 999px;
   padding: 7px 14px;
@@ -242,20 +289,14 @@ textarea:focus {
   transition: all 0.15s ease;
 }
 
-@media (prefers-color-scheme: dark) {
-  .chip {
-    background: rgba(139, 92, 246, 0.1);
-  }
-}
-
 .chip:hover {
-  border-color: var(--violet-400);
+  border-color: var(--gold);
 }
 
 .chip.selected {
-  background: var(--violet-600);
-  border-color: var(--violet-600);
-  color: white;
+  background: var(--maroon-600);
+  border-color: var(--gold);
+  color: var(--ink);
 }
 
 .chip.disabled {
@@ -263,7 +304,7 @@ textarea:focus {
   cursor: not-allowed;
 }
 
-/* Checkbox grid (Part 3) */
+/* Checkbox grid (Specializations) */
 .checkbox-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -285,23 +326,17 @@ textarea:focus {
   padding: 10px 12px;
   font-size: 13.5px;
   cursor: pointer;
-  background: var(--card-bg);
+  background: var(--surface);
 }
 
 .checkbox-item input {
   width: auto;
-  accent-color: var(--violet-600);
+  accent-color: var(--gold);
 }
 
 .checkbox-item.checked {
-  border-color: var(--violet-500);
-  background: var(--violet-50);
-}
-
-@media (prefers-color-scheme: dark) {
-  .checkbox-item.checked {
-    background: rgba(139, 92, 246, 0.12);
-  }
+  border-color: var(--gold);
+  background: var(--surface-raised);
 }
 
 /* Radio pills */
@@ -317,19 +352,20 @@ textarea:focus {
   padding: 9px 16px;
   font-size: 13.5px;
   cursor: pointer;
-  background: var(--card-bg);
+  background: var(--surface);
+  color: var(--ink);
 }
 
 .pill.selected {
-  border-color: var(--violet-600);
-  background: var(--violet-600);
-  color: white;
+  border-color: var(--gold);
+  background: var(--maroon-600);
+  color: var(--ink);
 }
 
 /* Nav buttons */
 .form-nav {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-top: 24px;
 }
 
@@ -344,16 +380,18 @@ textarea:focus {
 }
 
 .btn-primary {
-  background: var(--violet-600);
-  color: white;
+  background: var(--maroon-600);
+  color: var(--ink);
+  border: 1px solid var(--gold);
 }
 
 .btn-primary:hover {
-  background: var(--violet-700);
+  background: var(--maroon-700);
 }
 
 .btn-primary:disabled {
-  background: var(--violet-200);
+  background: var(--surface-raised);
+  border-color: var(--border);
   color: var(--ink-soft);
   cursor: not-allowed;
 }
@@ -365,7 +403,7 @@ textarea:focus {
 }
 
 .btn-secondary:hover {
-  border-color: var(--violet-400);
+  border-color: var(--gold);
   color: var(--ink);
 }
 
@@ -377,11 +415,12 @@ textarea:focus {
 
 /* Submit / result states */
 .status-card {
-  background: var(--card-bg);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 36px 28px;
   text-align: center;
+  margin-top: 40px;
 }
 
 .status-card .status-icon {
@@ -390,46 +429,11 @@ textarea:focus {
 }
 
 .status-card h2 {
+  font-family: var(--font-display);
   margin: 0 0 8px;
 }
 
 .status-card p {
   color: var(--ink-soft);
   line-height: 1.5;
-}
-
-.review-block {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 18px 20px;
-  margin-bottom: 14px;
-}
-
-.review-block h3 {
-  font-size: 14px;
-  margin: 0 0 10px;
-  color: var(--violet-600);
-}
-
-.review-row {
-  display: flex;
-  gap: 10px;
-  font-size: 13.5px;
-  padding: 5px 0;
-  border-bottom: 1px dashed var(--border);
-}
-
-.review-row:last-child {
-  border-bottom: none;
-}
-
-.review-row .k {
-  flex: 0 0 42%;
-  color: var(--ink-soft);
-}
-
-.review-row .v {
-  flex: 1;
-  word-break: break-word;
 }

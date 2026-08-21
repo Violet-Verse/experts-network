@@ -12,7 +12,6 @@ export interface ApplicationFormData {
   preferredContractLength: string;
   compensationType: string;
   compensationDetails: string;
-  futureOpportunities: string;
 
   // Part 2 — Experience
   companiesWorkedWith: string;
@@ -49,7 +48,6 @@ export const emptyFormData: ApplicationFormData = {
   preferredContractLength: "",
   compensationType: "",
   compensationDetails: "",
-  futureOpportunities: "",
 
   companiesWorkedWith: "",
   aiExperience: "",
