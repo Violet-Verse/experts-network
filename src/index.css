@@ -34,30 +34,6 @@ body {
   padding: 0 20px 80px;
 }
 
-/* Wordmark banner */
-.wordmark-banner {
-  margin: 0 -20px 40px;
-  padding: 56px 20px;
-  background: linear-gradient(160deg, var(--maroon-700), var(--maroon-900));
-  border-bottom: 1px solid var(--gold);
-  text-align: center;
-}
-
-.wordmark {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 700;
-  font-size: 40px;
-  color: var(--ink);
-  letter-spacing: 0.01em;
-}
-
-/* Landing */
-.landing-hero {
-  text-align: center;
-  margin-bottom: 32px;
-}
-
 .eyebrow {
   display: inline-block;
   font-size: 11px;
@@ -68,64 +44,164 @@ body {
   margin-bottom: 14px;
 }
 
-.landing-hero h1 {
+/* Full-bleed helper: breaks any section out of .app-shell's max-width */
+.full-bleed {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+}
+
+/* Photo placeholder — swap for a real <img> once photos are available */
+.photo-placeholder-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(135deg, rgba(201, 163, 74, 0.06) 0 2px, transparent 2px 18px),
+    linear-gradient(160deg, var(--surface-raised), var(--maroon-900));
+}
+
+.photo-placeholder-bg::after {
+  content: "Photo needed";
+  position: absolute;
+  bottom: 14px;
+  right: 16px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.7;
+}
+
+/* Hero photo section */
+.hero-photo {
+  position: relative;
+  min-height: 640px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.hero-nav {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px max(20px, calc((100vw - 880px) / 2 + 20px));
+}
+
+.hero-wordmark {
   font-family: var(--font-display);
-  font-size: 34px;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--ink);
+}
+
+.hero-photo-content {
+  position: relative;
+  z-index: 1;
+  padding: 40px max(20px, calc((100vw - 880px) / 2 + 20px)) 56px;
+  background: linear-gradient(0deg, rgba(11, 9, 8, 0.92), rgba(11, 9, 8, 0.35) 70%, transparent);
+  max-width: 700px;
+}
+
+.hero-photo-content h1 {
+  font-family: var(--font-display);
+  font-size: 36px;
+  line-height: 1.15;
   margin: 0 0 14px;
 }
 
-.landing-hero p {
+.hero-photo-content p {
   color: var(--ink-soft);
   font-size: 15px;
-  max-width: 580px;
-  margin: 0 auto;
   line-height: 1.6;
+  margin: 0 0 22px;
+  max-width: 520px;
 }
 
-.card.accent {
-  background: linear-gradient(160deg, var(--maroon-600), var(--maroon-900));
-  border-color: var(--maroon-600);
+/* Split text/photo section */
+.split-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 480px;
+}
+
+@media (max-width: 700px) {
+  .split-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+.split-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 56px max(20px, calc((100vw - 880px) / 2 + 20px)) 56px 20px;
+}
+
+@media (min-width: 701px) {
+  .split-text {
+    padding-left: max(20px, calc((100vw - 880px) / 2 + 20px));
+  }
+}
+
+.split-text h2 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  margin: 0 0 14px;
+}
+
+.split-text p {
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 22px;
+}
+
+.split-photo {
+  position: relative;
+  min-height: 320px;
+}
+
+/* Mission photo section */
+.mission-photo {
+  position: relative;
+  min-height: 340px;
+  display: flex;
+  align-items: center;
   justify-content: center;
 }
 
-.accent-standalone {
-  max-width: 420px;
-  margin: 0 auto 44px;
-  text-align: center;
-  align-items: center;
-}
-
-.accent-number {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 56px;
-  line-height: 1;
-  margin: 4px 0 12px;
-}
-
-.accent-desc {
-  color: var(--ink);
-  opacity: 0.9;
-  font-size: 14px;
-  line-height: 1.5;
-  margin: 0;
-}
-
-.mission-block {
+.mission-photo-overlay {
+  position: relative;
+  z-index: 1;
   text-align: center;
   max-width: 560px;
-  margin: 0 auto 44px;
-  padding: 28px 0 0;
-  border-top: 1px solid var(--border);
+  padding: 0 20px;
+  background: rgba(11, 9, 8, 0.55);
 }
 
-.mission-block p {
+.mission-photo-overlay p {
   font-family: var(--font-display);
   font-style: italic;
-  font-size: 19px;
+  font-size: 22px;
   line-height: 1.5;
   color: var(--ink);
   margin: 0;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+}
+
+.btn-outline:hover {
+  border-color: var(--gold);
+  color: var(--gold-soft);
 }
 
 .step-indicator {
@@ -345,6 +421,7 @@ textarea:focus {
 }
 
 .btn {
+  display: inline-block;
   font: inherit;
   font-size: 14.5px;
   font-weight: 600;
@@ -352,6 +429,7 @@ textarea:focus {
   border-radius: 999px;
   border: none;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .btn-primary {

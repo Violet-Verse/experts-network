@@ -5,7 +5,9 @@ export default function App() {
   return (
     <div className="app-shell">
       <Landing />
-      <ApplicationForm />
+      <div id="apply">
+        <ApplicationForm />
+      </div>
     </div>
   );
 }
