@@ -1,6 +1,5 @@
 import type { Step2Data } from "../types";
 import type { Step2Errors } from "../lib/validateApplication";
-import { wordCount } from "../lib/validateApplication";
 import {
   PRIMARY_ROLES,
   EXPERTISE_AREA_OPTIONS,
@@ -19,9 +18,6 @@ export function Step2Form({
   update: <K extends keyof Step2Data>(key: K, value: Step2Data[K]) => void;
   errors: Step2Errors;
 }) {
-  const bioWords = wordCount(data.bio);
-  const bioOutOfRange = data.bio.length > 0 && (bioWords < 100 || bioWords > 150);
-
   return (
     <>
       <div className="form-section">
@@ -55,17 +51,6 @@ export function Step2Form({
           />
           <span className="word-count">{data.expertiseAreas.length} / 3 selected</span>
           {errors.expertiseAreas && <p className="error-text">{errors.expertiseAreas}</p>}
-        </Card>
-
-        <Card icon="📝" title="One short bio" hint="Tell us about your experience in 100–150 words." span2>
-          <textarea
-            value={data.bio}
-            onChange={(e) => update("bio", e.target.value)}
-            rows={5}
-            placeholder="I'm a…"
-          />
-          <span className={`word-count${bioOutOfRange ? " warn" : ""}`}>{bioWords} words (100–150)</span>
-          {errors.bio && <p className="error-text">{errors.bio}</p>}
         </Card>
 
         <Card icon="⏰" title="Availability" hint="Hours per week you're able to commit.">

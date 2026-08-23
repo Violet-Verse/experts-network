@@ -13,7 +13,6 @@ export const emptyStep1Data: Step1Data = {
 export interface Step2Data {
   primaryRole: string;
   expertiseAreas: string[]; // exactly 3
-  bio: string;
   hoursPerWeek: string;
   compensationDetails: string;
   primaryIndustries: string[];
@@ -22,7 +21,6 @@ export interface Step2Data {
 export const emptyStep2Data: Step2Data = {
   primaryRole: "",
   expertiseAreas: [],
-  bio: "",
   hoursPerWeek: "",
   compensationDetails: "",
   primaryIndustries: [],

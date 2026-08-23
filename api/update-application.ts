@@ -5,7 +5,6 @@ interface Step2Payload {
   id: string;
   primaryRole: string;
   expertiseAreas: string[];
-  bio: string;
   hoursPerWeek: string;
   compensationDetails: string;
   primaryIndustries: string[];
@@ -13,7 +12,7 @@ interface Step2Payload {
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-const REQUIRED_STRING_FIELDS: (keyof Step2Payload)[] = ["id", "primaryRole", "bio", "hoursPerWeek", "compensationDetails"];
+const REQUIRED_STRING_FIELDS: (keyof Step2Payload)[] = ["id", "primaryRole", "hoursPerWeek", "compensationDetails"];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
@@ -44,7 +43,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const result = await supabaseRequest("PATCH", `/rest/v1/${tableName}?id=eq.${payload.id}`, {
       primary_role: payload.primaryRole,
       expertise_areas: payload.expertiseAreas,
-      bio: payload.bio,
       hours_per_week: payload.hoursPerWeek,
       compensation_details: payload.compensationDetails,
       primary_industries: payload.primaryIndustries,
