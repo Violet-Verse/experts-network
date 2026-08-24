@@ -103,7 +103,9 @@ body {
 
 .hero-photo-content h1 {
   font-family: var(--font-display);
-  font-size: 36px;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  font-size: clamp(26px, 6vw, 36px);
   line-height: 1.15;
   margin: 0 0 14px;
 }
@@ -112,8 +114,18 @@ body {
   color: var(--ink-soft);
   font-size: 15px;
   line-height: 1.6;
-  margin: 0 0 22px;
+  margin: 0 0 12px;
   max-width: 520px;
+}
+
+.hero-photo-content p:last-of-type {
+  margin-bottom: 22px;
+}
+
+@media (max-width: 600px) {
+  .hero-photo-content {
+    padding: 32px 20px 40px;
+  }
 }
 
 /* Split text/photo section */

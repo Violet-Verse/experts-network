@@ -15,7 +15,11 @@ export function Landing() {
         </nav>
         <div className="hero-photo-content">
           <span className="eyebrow">Invite Only</span>
-          <h1>A Job Intelligence Service for the World's Most Dynamic Creators</h1>
+          <h1>Your Expertise, Reimagined.</h1>
+          <p>
+            Join Verso — a curated network connecting exceptional professionals with AI research
+            and training projects.
+          </p>
           <p>
             We match creators with companies and projects built on ethical data capture. Get paid
             weekly. Work on the most cutting-edge projects out there.
