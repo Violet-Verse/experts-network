@@ -1,8 +1,12 @@
+import heroPhoto from "../assets/hero.jpg";
+import splitPhoto from "../assets/split.jpg";
+import missionPhoto from "../assets/mission.jpg";
+
 export function Landing() {
   return (
     <>
       <section className="hero-photo full-bleed">
-        <div className="photo-placeholder-bg" />
+        <div className="photo-bg" style={{ backgroundImage: `url(${heroPhoto})` }} />
         <nav className="hero-nav">
           <span className="hero-wordmark">Verso Network</span>
           <a href="#apply" className="btn btn-outline">
@@ -35,11 +39,11 @@ export function Landing() {
             Apply Now
           </a>
         </div>
-        <div className="split-photo photo-placeholder-bg" />
+        <div className="split-photo photo-bg" style={{ backgroundImage: `url(${splitPhoto})` }} />
       </section>
 
       <section className="mission-photo full-bleed">
-        <div className="photo-placeholder-bg" />
+        <div className="photo-bg" style={{ backgroundImage: `url(${missionPhoto})` }} />
         <div className="mission-photo-overlay">
           <span className="eyebrow">Our Mission</span>
           <p>

@@ -50,26 +50,20 @@ body {
   margin-left: calc(-50vw + 50%);
 }
 
-/* Photo placeholder — swap for a real <img> once photos are available */
-.photo-placeholder-bg {
+/* Photo background: fills its (relatively positioned) parent, with a warm
+   tint over it to keep photos in harmony with the maroon/gold palette. */
+.photo-bg {
   position: absolute;
   inset: 0;
-  background:
-    repeating-linear-gradient(135deg, rgba(201, 163, 74, 0.06) 0 2px, transparent 2px 18px),
-    linear-gradient(160deg, var(--surface-raised), var(--maroon-900));
+  background-size: cover;
+  background-position: center;
 }
 
-.photo-placeholder-bg::after {
-  content: "Photo needed";
+.photo-bg::after {
+  content: "";
   position: absolute;
-  bottom: 14px;
-  right: 16px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--gold);
-  opacity: 0.7;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(44, 8, 16, 0.35), rgba(11, 9, 8, 0.55));
 }
 
 /* Hero photo section */
