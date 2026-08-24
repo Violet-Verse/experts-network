@@ -2,16 +2,21 @@ import heroPhoto from "../assets/hero.jpg";
 import splitPhoto from "../assets/split.jpg";
 import missionPhoto from "../assets/mission.jpg";
 
-export function Landing() {
+export function Landing({ onLoginClick }: { onLoginClick: () => void }) {
   return (
     <>
       <section className="hero-photo full-bleed">
         <div className="photo-bg" style={{ backgroundImage: `url(${heroPhoto})` }} />
         <nav className="hero-nav">
           <span className="hero-wordmark">Verso Network</span>
-          <a href="#apply" className="btn btn-outline">
-            Apply Now
-          </a>
+          <div className="hero-nav-actions">
+            <button type="button" className="hero-nav-login" onClick={onLoginClick}>
+              Log In
+            </button>
+            <a href="#apply" className="btn btn-outline">
+              Apply Now
+            </a>
+          </div>
         </nav>
         <div className="hero-photo-content">
           <span className="eyebrow">Invite Only</span>

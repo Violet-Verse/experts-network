@@ -496,3 +496,177 @@ textarea:focus {
   color: var(--ink-soft);
   line-height: 1.5;
 }
+
+/* Nav login action */
+.hero-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.hero-nav-login {
+  background: none;
+  border: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hero-nav-login:hover {
+  color: var(--gold-soft);
+}
+
+/* Login modal */
+.login-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 9, 8, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 10;
+}
+
+.login-card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  max-width: 380px;
+  width: 100%;
+}
+
+.login-card h3 {
+  font-family: var(--font-display);
+  margin: 0 0 8px;
+}
+
+.login-card p {
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0 0 18px;
+}
+
+.login-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.login-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.login-close:hover {
+  color: var(--ink);
+}
+
+/* Dashboard */
+.dashboard {
+  padding-top: 40px;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.dashboard-header h1 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  margin: 0 0 6px;
+}
+
+.opportunity-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+@media (max-width: 620px) {
+  .opportunity-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.opportunity-card {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color 0.15s ease;
+}
+
+.opportunity-card:hover {
+  border-color: var(--gold);
+}
+
+.opportunity-card-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+
+.opportunity-date {
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.opportunity-card h3 {
+  font-size: 16px;
+  margin: 0 0 4px;
+}
+
+.opportunity-company {
+  color: var(--gold-soft);
+  font-size: 13px;
+  margin: 0 0 8px;
+}
+
+.opportunity-desc {
+  color: var(--ink-soft);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0 0 10px;
+}
+
+.opportunity-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.opportunity-tag {
+  font-size: 11px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 10px;
+  color: var(--ink-soft);
+}

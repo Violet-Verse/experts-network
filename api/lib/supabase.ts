@@ -15,7 +15,10 @@ export async function supabaseRequest(
   method: "POST" | "PATCH",
   path: string,
   body: unknown
-): Promise<{ status: number } & ({ ok: true; data: unknown } | { ok: false; errorBody: string })> {
+): Promise<
+  | { ok: true; status: number; data: unknown }
+  | { ok: false; status: number; errorBody: string }
+> {
   const { url, serviceRoleKey } = getSupabaseConfig();
 
   if (!url || !serviceRoleKey) {
