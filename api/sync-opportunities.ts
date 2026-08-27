@@ -1,12 +1,12 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { XMLParser } from "fast-xml-parser";
-import { getSupabaseConfig, isValidSupabaseUrl } from "./lib/supabase.js";
+import { getSupabaseConfig, isValidSupabaseUrl } from "../lib/supabase.js";
 import {
   fetchHnOpportunities,
   fetchRemoteOkOpportunities,
   fetchWwrOpportunities,
-} from "./lib/opportunities.js";
-import type { NormalizedOpportunity } from "./lib/opportunities.js";
+} from "../lib/opportunities.js";
+import type { NormalizedOpportunity } from "../lib/opportunities.js";
 
 const xmlParser = new XMLParser({ ignoreAttributes: false });
 
