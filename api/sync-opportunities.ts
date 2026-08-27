@@ -1,5 +1,4 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { XMLParser } from "fast-xml-parser";
 import { getSupabaseConfig, isValidSupabaseUrl } from "../lib/supabase.js";
 import {
   fetchHnOpportunities,
@@ -7,8 +6,6 @@ import {
   fetchWwrOpportunities,
 } from "../lib/opportunities.js";
 import type { NormalizedOpportunity } from "../lib/opportunities.js";
-
-const xmlParser = new XMLParser({ ignoreAttributes: false });
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const cronSecret = process.env.CRON_SECRET;
@@ -32,7 +29,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const sources: { name: string; run: () => Promise<NormalizedOpportunity[]> }[] = [
     { name: "hn", run: fetchHnOpportunities },
     { name: "remoteok", run: fetchRemoteOkOpportunities },
-    { name: "wwr", run: () => fetchWwrOpportunities((xml) => xmlParser.parse(xml)) },
+    { name: "wwr", run: fetchWwrOpportunities },
   ];
 
   const results = await Promise.allSettled(sources.map((s) => s.run()));

@@ -118,50 +118,67 @@ export async function fetchRemoteOkOpportunities(): Promise<NormalizedOpportunit
     }));
 }
 
-interface WwrItem {
-  title?: string;
-  link?: string;
-  description?: string;
-  pubDate?: string;
-  category?: string | string[];
-  guid?: string | { "#text"?: string };
+function extractTag(block: string, tag: string): string | null {
+  const match = block.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`, "i"));
+  if (!match) return null;
+  const raw = match[1].trim();
+  const cdataMatch = raw.match(/^<!\[CDATA\[([\s\S]*?)\]\]>$/);
+  return (cdataMatch ? cdataMatch[1] : raw).trim();
 }
 
-export async function fetchWwrOpportunities(parseXml: (xml: string) => unknown): Promise<NormalizedOpportunity[]> {
+function extractAllTags(block: string, tag: string): string[] {
+  const results: string[] = [];
+  const re = new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`, "gi");
+  let match: RegExpExecArray | null;
+  while ((match = re.exec(block))) {
+    const raw = match[1].trim();
+    const cdataMatch = raw.match(/^<!\[CDATA\[([\s\S]*?)\]\]>$/);
+    results.push((cdataMatch ? cdataMatch[1] : raw).trim());
+  }
+  return results;
+}
+
+// Parsed with plain regex rather than a real XML parser dependency — RSS
+// item structure is simple and predictable enough that this avoids pulling
+// in an extra package for one feed.
+export async function fetchWwrOpportunities(): Promise<NormalizedOpportunity[]> {
   const res = await fetch("https://weworkremotely.com/categories/remote-programming-jobs.rss", {
     headers: { "User-Agent": HN_UA },
   });
   if (!res.ok) throw new Error(`We Work Remotely fetch failed: ${res.status}`);
   const xml = await res.text();
-  const parsed = parseXml(xml) as { rss?: { channel?: { item?: WwrItem | WwrItem[] } } };
-  const rawItems = parsed?.rss?.channel?.item;
-  const items: WwrItem[] = Array.isArray(rawItems) ? rawItems : rawItems ? [rawItems] : [];
+  const itemBlocks = extractAllTags(xml, "item");
 
   const results: NormalizedOpportunity[] = [];
-  for (const item of items) {
-    if (!item.title || !item.link) continue;
-    const description = item.description ? stripHtml(item.description) : "";
-    if (!mentionsAi(item.title, description)) continue;
+  for (const block of itemBlocks) {
+    const title = extractTag(block, "title");
+    const link = extractTag(block, "link");
+    if (!title || !link) continue;
 
-    const [maybeCompany, ...rest] = item.title.split(":");
+    const rawDescription = extractTag(block, "description") ?? "";
+    const description = stripHtml(rawDescription);
+    if (!mentionsAi(title, description)) continue;
+
+    const [maybeCompany, ...rest] = title.split(":");
     const hasCompany = rest.length > 0;
 
-    const guid = typeof item.guid === "string" ? item.guid : item.guid?.["#text"];
-    const externalId = guid || item.link;
-    const tags = Array.isArray(item.category) ? item.category : item.category ? [item.category] : [];
+    const guid = extractTag(block, "guid");
+    const externalId = guid || link;
+    const tags = extractAllTags(block, "category");
+    const pubDate = extractTag(block, "pubDate");
 
     results.push({
       source: "wwr",
       external_id: externalId,
       type: "job",
-      title: hasCompany ? rest.join(":").trim() : item.title,
+      title: hasCompany ? rest.join(":").trim() : title,
       company: hasCompany ? maybeCompany.trim() : null,
       description: description.slice(0, 1000) || null,
-      url: item.link,
+      url: link,
       tags,
       location: null,
       remote: true,
-      posted_at: item.pubDate ? new Date(item.pubDate).toISOString() : null,
+      posted_at: pubDate ? new Date(pubDate).toISOString() : null,
     });
   }
   return results;
