@@ -33,7 +33,7 @@ export function LoginForm({ onClose }: { onClose: () => void }) {
     setStatus("sending");
     setError(null);
 
-    const { error: authError } =
+    const { data, error: authError } =
       mode === "login"
         ? await supabase.auth.signInWithPassword({ email: email.trim(), password })
         : await supabase.auth.signUp({ email: email.trim(), password });
@@ -41,6 +41,19 @@ export function LoginForm({ onClose }: { onClose: () => void }) {
     if (authError) {
       setStatus("error");
       setError(authError.message);
+      return;
+    }
+
+    if (!data.session) {
+      // No error, but also no session: Supabase is waiting on email
+      // confirmation before it'll issue one. Say so explicitly instead of
+      // silently closing the modal with nothing having changed.
+      setStatus("error");
+      setError(
+        mode === "signup"
+          ? "Account created, but email confirmation is still required on this project — ask the admin to turn off 'Confirm email' under Authentication settings, then try again."
+          : "Signed in, but this account still needs email confirmation. Ask the admin to confirm it or turn off 'Confirm email' in Authentication settings."
+      );
       return;
     }
 
