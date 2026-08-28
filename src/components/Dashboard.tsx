@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabaseClient";
+import { Assessment } from "./Assessment";
 
 interface Opportunity {
   id: string;
@@ -24,6 +25,7 @@ const SOURCE_LABELS: Record<string, string> = {
 };
 
 export function Dashboard({ session }: { session: Session }) {
+  const [view, setView] = useState<"opportunities" | "assessment">("opportunities");
   const [opportunities, setOpportunities] = useState<Opportunity[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -63,33 +65,58 @@ export function Dashboard({ session }: { session: Session }) {
         </button>
       </div>
 
-      {error && <p className="error-text">Couldn't load opportunities: {error}</p>}
-      {opportunities === null && !error && <p className="section-sub">Loading opportunities…</p>}
+      <div className="login-mode-toggle" style={{ maxWidth: 340, marginBottom: 24 }}>
+        <button
+          type="button"
+          className={view === "opportunities" ? "active" : ""}
+          onClick={() => setView("opportunities")}
+        >
+          Opportunities
+        </button>
+        <button
+          type="button"
+          className={view === "assessment" ? "active" : ""}
+          onClick={() => setView("assessment")}
+        >
+          Assessment ($5)
+        </button>
+      </div>
 
-      {internal.length > 0 && (
-        <div className="form-section">
-          <h2 style={{ fontSize: 20 }}>From Verso Network</h2>
-          <div className="opportunity-list">
-            {internal.map((o) => (
-              <OpportunityCard key={o.id} opportunity={o} />
-            ))}
-          </div>
-        </div>
-      )}
+      {view === "assessment" ? (
+        <Assessment session={session} />
+      ) : (
+        <>
+          {error && <p className="error-text">Couldn't load opportunities: {error}</p>}
+          {opportunities === null && !error && (
+            <p className="section-sub">Loading opportunities…</p>
+          )}
 
-      {external.length > 0 && (
-        <div className="form-section">
-          <h2 style={{ fontSize: 20 }}>In the AI Space</h2>
-          <div className="opportunity-list">
-            {external.map((o) => (
-              <OpportunityCard key={o.id} opportunity={o} />
-            ))}
-          </div>
-        </div>
-      )}
+          {internal.length > 0 && (
+            <div className="form-section">
+              <h2 style={{ fontSize: 20 }}>From Verso Network</h2>
+              <div className="opportunity-list">
+                {internal.map((o) => (
+                  <OpportunityCard key={o.id} opportunity={o} />
+                ))}
+              </div>
+            </div>
+          )}
 
-      {opportunities !== null && opportunities.length === 0 && (
-        <p className="section-sub">No opportunities yet — check back soon.</p>
+          {external.length > 0 && (
+            <div className="form-section">
+              <h2 style={{ fontSize: 20 }}>In the AI Space</h2>
+              <div className="opportunity-list">
+                {external.map((o) => (
+                  <OpportunityCard key={o.id} opportunity={o} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {opportunities !== null && opportunities.length === 0 && (
+            <p className="section-sub">No opportunities yet — check back soon.</p>
+          )}
+        </>
       )}
     </div>
   );
