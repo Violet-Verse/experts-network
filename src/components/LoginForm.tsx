@@ -2,10 +2,20 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { supabase } from "../lib/supabaseClient";
 
+type Mode = "login" | "signup";
+
 export function LoginForm({ onClose }: { onClose: () => void }) {
+  const [mode, setMode] = useState<Mode>("login");
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [password, setPassword] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
+
+  const switchMode = (next: Mode) => {
+    setMode(next);
+    setStatus("idle");
+    setError(null);
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -14,18 +24,29 @@ export function LoginForm({ onClose }: { onClose: () => void }) {
       setError("Please enter a valid email address.");
       return;
     }
-    setStatus("sending");
-    setError(null);
-    const { error: signInError } = await supabase.auth.signInWithOtp({
-      email: email.trim(),
-      options: { emailRedirectTo: window.location.origin },
-    });
-    if (signInError) {
+    if (password.length < 6) {
       setStatus("error");
-      setError(signInError.message);
+      setError("Password must be at least 6 characters.");
       return;
     }
-    setStatus("sent");
+
+    setStatus("sending");
+    setError(null);
+
+    const { error: authError } =
+      mode === "login"
+        ? await supabase.auth.signInWithPassword({ email: email.trim(), password })
+        : await supabase.auth.signUp({ email: email.trim(), password });
+
+    if (authError) {
+      setStatus("error");
+      setError(authError.message);
+      return;
+    }
+
+    // A successful sign-in/sign-up triggers onAuthStateChange in useAuthSession,
+    // which swaps the whole app over to the Dashboard — nothing else to do here.
+    onClose();
   };
 
   return (
@@ -34,29 +55,54 @@ export function LoginForm({ onClose }: { onClose: () => void }) {
         <button type="button" className="login-close" onClick={onClose} aria-label="Close">
           ×
         </button>
-        {status === "sent" ? (
-          <>
-            <h3>Check your email</h3>
-            <p>We sent a sign-in link to {email}. Click it to log in to your dashboard.</p>
-          </>
-        ) : (
-          <>
-            <h3>Log In</h3>
-            <p>Enter the email you applied with — we'll send you a one-click sign-in link.</p>
-            <form onSubmit={handleSubmit}>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-              />
-              {status === "error" && error && <p className="error-text">{error}</p>}
-              <button className="btn btn-primary" type="submit" disabled={status === "sending"}>
-                {status === "sending" ? "Sending…" : "Send Sign-In Link"}
-              </button>
-            </form>
-          </>
-        )}
+        <h3>{mode === "login" ? "Log In" : "Create Account"}</h3>
+        <p>
+          {mode === "login"
+            ? "Enter the email and password you signed up with."
+            : "Use the email you applied with to create your dashboard login."}
+        </p>
+
+        <div className="login-mode-toggle">
+          <button
+            type="button"
+            className={mode === "login" ? "active" : ""}
+            onClick={() => switchMode("login")}
+          >
+            Log In
+          </button>
+          <button
+            type="button"
+            className={mode === "signup" ? "active" : ""}
+            onClick={() => switchMode("signup")}
+          >
+            Create Account
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@example.com"
+            autoComplete="email"
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            autoComplete={mode === "login" ? "current-password" : "new-password"}
+          />
+          {status === "error" && error && <p className="error-text">{error}</p>}
+          <button className="btn btn-primary" type="submit" disabled={status === "sending"}>
+            {status === "sending"
+              ? "Please wait…"
+              : mode === "login"
+                ? "Log In"
+                : "Create Account"}
+          </button>
+        </form>
       </div>
     </div>
   );
