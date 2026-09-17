@@ -38,7 +38,7 @@ export function Landing({ onLoginClick }: { onLoginClick: () => void }) {
       <section className="split-section full-bleed">
         <div className="split-text">
           <span className="eyebrow">Creators · Research · AI Evaluation</span>
-          <h2>Built for the Work You Actually Want</h2>
+          <h2>Created for People With Niche Expertise</h2>
           <p>
             No cold DMs, no open calls. Every project on Verso Network is pre-vetted before it
             reaches you, pays on a weekly cadence, and puts you in the room with teams building

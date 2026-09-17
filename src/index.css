@@ -144,12 +144,13 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 56px max(20px, calc((100vw - 880px) / 2 + 20px)) 56px 20px;
+  padding: 56px 40px 56px 20px;
 }
 
 @media (min-width: 701px) {
   .split-text {
     padding-left: max(20px, calc((100vw - 880px) / 2 + 20px));
+    padding-right: 60px;
   }
 }
 
