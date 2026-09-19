@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabaseClient";
 import { Assessment } from "./Assessment";
+import { Profile } from "./Profile";
+import { AdminAddOpportunity } from "./AdminAddOpportunity";
 
 interface Opportunity {
   id: string;
@@ -24,10 +26,13 @@ const SOURCE_LABELS: Record<string, string> = {
   verso: "Verso Network",
 };
 
-export function Dashboard({ session }: { session: Session }) {
-  const [view, setView] = useState<"opportunities" | "assessment">("opportunities");
+export function Dashboard({ session, role }: { session: Session; role?: string }) {
+  const [view, setView] = useState<"opportunities" | "assessment" | "profile" | "admin">(
+    "opportunities"
+  );
   const [opportunities, setOpportunities] = useState<Opportunity[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [myTagLabels, setMyTagLabels] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     let cancelled = false;
@@ -49,6 +54,29 @@ export function Dashboard({ session }: { session: Session }) {
     };
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+    async function loadMyTags() {
+      const { data: expert } = await supabase
+        .from("experts")
+        .select("id")
+        .eq("user_id", session.user.id)
+        .maybeSingle();
+      if (cancelled || !expert) return;
+      const { data: links } = await supabase
+        .from("expert_tags")
+        .select("tags(label)")
+        .eq("expert_id", (expert as { id: string }).id);
+      if (cancelled || !links) return;
+      const rows = links as unknown as { tags: { label: string } | null }[];
+      setMyTagLabels(new Set(rows.filter((r) => r.tags).map((r) => r.tags!.label.toLowerCase())));
+    }
+    loadMyTags();
+    return () => {
+      cancelled = true;
+    };
+  }, [session.user.id, view]);
+
   const internal = opportunities?.filter((o) => o.source === "verso") ?? [];
   const external = opportunities?.filter((o) => o.source !== "verso") ?? [];
 
@@ -65,7 +93,10 @@ export function Dashboard({ session }: { session: Session }) {
         </button>
       </div>
 
-      <div className="login-mode-toggle" style={{ maxWidth: 340, marginBottom: 24 }}>
+      <div
+        className="login-mode-toggle"
+        style={{ maxWidth: 560, marginBottom: 24, flexWrap: "wrap" }}
+      >
         <button
           type="button"
           className={view === "opportunities" ? "active" : ""}
@@ -80,11 +111,28 @@ export function Dashboard({ session }: { session: Session }) {
         >
           Assessment ($5)
         </button>
+        <button
+          type="button"
+          className={view === "profile" ? "active" : ""}
+          onClick={() => setView("profile")}
+        >
+          Profile
+        </button>
+        {role === "admin" && (
+          <button
+            type="button"
+            className={view === "admin" ? "active" : ""}
+            onClick={() => setView("admin")}
+          >
+            Add Opportunity
+          </button>
+        )}
       </div>
 
-      {view === "assessment" ? (
-        <Assessment session={session} />
-      ) : (
+      {view === "assessment" && <Assessment session={session} />}
+      {view === "profile" && <Profile session={session} />}
+      {view === "admin" && role === "admin" && <AdminAddOpportunity session={session} />}
+      {view === "opportunities" && (
         <>
           {error && <p className="error-text">Couldn't load opportunities: {error}</p>}
           {opportunities === null && !error && (
@@ -96,7 +144,7 @@ export function Dashboard({ session }: { session: Session }) {
               <h2 style={{ fontSize: 20 }}>From Verso Network</h2>
               <div className="opportunity-list">
                 {internal.map((o) => (
-                  <OpportunityCard key={o.id} opportunity={o} />
+                  <OpportunityCard key={o.id} opportunity={o} myTagLabels={myTagLabels} />
                 ))}
               </div>
             </div>
@@ -107,7 +155,7 @@ export function Dashboard({ session }: { session: Session }) {
               <h2 style={{ fontSize: 20 }}>In the AI Space</h2>
               <div className="opportunity-list">
                 {external.map((o) => (
-                  <OpportunityCard key={o.id} opportunity={o} />
+                  <OpportunityCard key={o.id} opportunity={o} myTagLabels={myTagLabels} />
                 ))}
               </div>
             </div>
@@ -122,13 +170,21 @@ export function Dashboard({ session }: { session: Session }) {
   );
 }
 
-function OpportunityCard({ opportunity }: { opportunity: Opportunity }) {
+function OpportunityCard({
+  opportunity,
+  myTagLabels,
+}: {
+  opportunity: Opportunity;
+  myTagLabels: Set<string>;
+}) {
   const posted = opportunity.posted_at
     ? new Date(opportunity.posted_at).toLocaleDateString(undefined, {
         month: "short",
         day: "numeric",
       })
     : null;
+
+  const matchCount = opportunity.tags.filter((t) => myTagLabels.has(t.toLowerCase())).length;
 
   return (
     <a
@@ -141,6 +197,11 @@ function OpportunityCard({ opportunity }: { opportunity: Opportunity }) {
         <span className="opportunity-source">{SOURCE_LABELS[opportunity.source] ?? opportunity.source}</span>
         {posted && <span className="opportunity-date">{posted}</span>}
       </div>
+      {matchCount > 0 && (
+        <span className="opportunity-match-badge">
+          {matchCount} skill match{matchCount > 1 ? "es" : ""}
+        </span>
+      )}
       <h3>{opportunity.title}</h3>
       {opportunity.company && <p className="opportunity-company">{opportunity.company}</p>}
       {opportunity.description && (

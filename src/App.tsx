@@ -47,7 +47,7 @@ export default function App() {
 
     return (
       <div className="app-shell">
-        <Dashboard session={session} />
+        <Dashboard session={session} role={access.role} />
       </div>
     );
   }
