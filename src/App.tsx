@@ -68,12 +68,18 @@ export default function App() {
   }
 
   return (
-    <div className="app-shell">
-      <Landing onLoginClick={() => setShowLogin(true)} />
-      <div id="apply">
-        <ApplicationForm />
+    <>
+      <div className="app-shell">
+        <Landing onLoginClick={() => setShowLogin(true)} />
+        <div id="apply">
+          <ApplicationForm />
+        </div>
+        {showLogin && <LoginForm onClose={() => setShowLogin(false)} />}
       </div>
-      {showLogin && <LoginForm onClose={() => setShowLogin(false)} />}
-    </div>
+      <footer className="site-footer full-bleed">
+        <span>© {new Date().getFullYear()} Verso Network</span>
+        <a href="#privacy">Privacy Policy</a>
+      </footer>
+    </>
   );
 }
