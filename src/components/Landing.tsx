@@ -65,6 +65,11 @@ export function Landing({ onLoginClick }: { onLoginClick: () => void }) {
           </p>
         </div>
       </section>
+
+      <footer className="site-footer full-bleed">
+        <span>© {new Date().getFullYear()} Verso Network</span>
+        <a href="#privacy">Privacy Policy</a>
+      </footer>
     </>
   );
 }
