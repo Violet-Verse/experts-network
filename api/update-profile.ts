@@ -17,7 +17,11 @@ interface ProfilePayload {
   languages: string[];
   portfolioLinks: string;
   tags: TagInput[];
+  profileSharing: boolean;
+  marketingEmails: boolean;
 }
+
+const CONSENT_TYPES = ["profile_sharing", "marketing_emails"] as const;
 
 const MAX_TAGS = 30;
 const ALLOWED_TAG_CATEGORIES = new Set(["occupation", "skill", "industry", "domain_expertise", "task_capability"]);
@@ -147,6 +151,34 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const body = await linkRes.text();
         console.error("Failed to link expert tags:", linkRes.status, body);
         return res.status(502).json({ error: "Failed to save your skills." });
+      }
+    }
+
+    // Consents are append-only: only insert a new row when the value
+    // actually changed, so the audit trail stays meaningful instead of
+    // gaining a no-op row on every profile save.
+    const consentValues: Record<(typeof CONSENT_TYPES)[number], boolean> = {
+      profile_sharing: payload.profileSharing === true,
+      marketing_emails: payload.marketingEmails === true,
+    };
+    for (const type of CONSENT_TYPES) {
+      const latestRes = await fetch(
+        `${base}/rest/v1/consents?user_id=eq.${user.id}&consent_type=eq.${type}&select=granted&order=created_at.desc&limit=1`,
+        { headers: { apikey: serviceRoleKey, Authorization: `Bearer ${serviceRoleKey}` } }
+      );
+      const latestRows = latestRes.ok ? ((await latestRes.json()) as { granted: boolean }[]) : [];
+      const currentValue = latestRows[0]?.granted ?? false;
+      if (currentValue === consentValues[type]) continue;
+
+      const insertRes = await fetch(`${base}/rest/v1/consents`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ user_id: user.id, consent_type: type, granted: consentValues[type] }),
+      });
+      if (!insertRes.ok) {
+        const body = await insertRes.text();
+        console.error(`Failed to record consent change for ${type}:`, insertRes.status, body);
+        return res.status(502).json({ error: "Failed to save your privacy preferences." });
       }
     }
 

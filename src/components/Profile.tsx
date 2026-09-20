@@ -49,6 +49,8 @@ export function Profile({ session }: { session: Session }) {
   const [portfolioLinks, setPortfolioLinks] = useState("");
   const [selectedTags, setSelectedTags] = useState<SelectedTag[]>([]);
   const [tagQuery, setTagQuery] = useState("");
+  const [profileSharing, setProfileSharing] = useState(false);
+  const [marketingEmails, setMarketingEmails] = useState(false);
 
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
@@ -57,13 +59,30 @@ export function Profile({ session }: { session: Session }) {
     let cancelled = false;
 
     async function load() {
-      const [{ data: expert }, { data: tags }] = await Promise.all([
+      const [{ data: expert }, { data: tags }, { data: consents }] = await Promise.all([
         supabase.from("experts").select("*").eq("user_id", session.user.id).maybeSingle(),
         supabase.from("tags").select("*").order("category").order("label"),
+        supabase
+          .from("consents")
+          .select("consent_type, granted")
+          .eq("user_id", session.user.id)
+          .order("created_at", { ascending: false }),
       ]);
       if (cancelled) return;
 
       if (tags) setCatalog(tags as TagRow[]);
+
+      if (consents) {
+        const rows = consents as { consent_type: string; granted: boolean }[];
+        // Rows come back newest-first, so the first occurrence of each
+        // type is its current value.
+        const latest = new Map<string, boolean>();
+        for (const r of rows) {
+          if (!latest.has(r.consent_type)) latest.set(r.consent_type, r.granted);
+        }
+        setProfileSharing(latest.get("profile_sharing") ?? false);
+        setMarketingEmails(latest.get("marketing_emails") ?? false);
+      }
 
       if (expert) {
         const e = expert as ExpertRow;
@@ -166,6 +185,8 @@ export function Profile({ session }: { session: Session }) {
           languages: languages.split(",").map((l) => l.trim()).filter(Boolean),
           portfolioLinks,
           tags: selectedTags,
+          profileSharing,
+          marketingEmails,
         }),
       });
       const data = await res.json();
@@ -207,6 +228,31 @@ export function Profile({ session }: { session: Session }) {
       <p className="section-sub" style={{ marginTop: 6, marginBottom: 24 }}>
         {completeness.filled}/{completeness.total} complete
       </p>
+
+      <div className="card span-2" style={{ marginBottom: 20 }}>
+        <label className="card-title">Privacy & Data Use</label>
+        <p className="card-hint">
+          Creating an account or a profile here never means your data is used to train or evaluate
+          AI models. That only ever happens for a specific project you individually submit work
+          for, with its own separate agreement at that time — nothing on this page covers that.
+        </p>
+        <div className="chip-group" style={{ marginTop: 10 }}>
+          <button
+            type="button"
+            className={`chip${profileSharing ? " selected" : ""}`}
+            onClick={() => setProfileSharing((v) => !v)}
+          >
+            {profileSharing ? "✓ " : ""}Share my profile with matched companies
+          </button>
+          <button
+            type="button"
+            className={`chip${marketingEmails ? " selected" : ""}`}
+            onClick={() => setMarketingEmails((v) => !v)}
+          >
+            {marketingEmails ? "✓ " : ""}Email me about new opportunities
+          </button>
+        </div>
+      </div>
 
       <div className="card-grid">
         <div className="card">

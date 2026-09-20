@@ -199,6 +199,14 @@ body {
   margin: 0;
 }
 
+.mission-photo-overlay p.mission-disclosure {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-top: 14px;
+}
+
 .btn-outline {
   background: transparent;
   color: var(--ink);

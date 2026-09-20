@@ -59,6 +59,10 @@ export function Landing({ onLoginClick }: { onLoginClick: () => void }) {
             We believe in the power of intellectual capital — and we operate on ethical data and
             AI practices.
           </p>
+          <p className="mission-disclosure">
+            Your data is never used to train or evaluate AI models without your separate, explicit
+            agreement for that specific project.
+          </p>
         </div>
       </section>
     </>
