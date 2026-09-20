@@ -82,7 +82,7 @@ export function PrivacyPolicy({ onBack }: { onBack: () => void }) {
           <h2 style={{ fontSize: 20 }}>Questions or requests</h2>
           <p className="section-sub">
             To ask a question, or to request that your data be corrected or deleted, email{" "}
-            <a href="mailto:melissa@melwrites.com">melissa@melwrites.com</a>.
+            <a href="mailto:gm@violetverse.io">gm@violetverse.io</a>.
           </p>
         </div>
       </div>
